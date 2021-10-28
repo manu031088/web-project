@@ -1,0 +1,373 @@
+# TODO add email validator
+
+---
+questions:
+  -
+    message: "Application name"
+    name: ApplicationName
+    help: "https://confluence.tools.telstra.com/display/JETPACK/Links#Links-Ability"
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Application description"
+    name: ApplicationDescription
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+      -
+        arguments:
+          - 10
+        name: minlength
+  -
+    message: "Project name"
+    name: ProjectName
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Team name"
+    name: TeamName
+    help: "Team name will be used for Sourceclear Workspace Name and must be 3-20 characters long, start with a letter and only be Letters, Numbers spaces dashes or underscores"
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Are you already using SourceClear?"
+    name: SourceClear
+    prompt:
+      type: confirm
+    disable_questions_on: false
+    default: false 
+    validators:
+      -
+        name: required
+  -
+    message: "SourceClear Workspace Name"
+    name: SourceClearWorkspaceName
+    prompt:
+      type: input
+    parent_name: SourceClear
+    validators:
+      -
+        name: required
+  -
+    message: "Do you want to enable SonarQube scan?"
+    name: SonarQubeScanner 
+    prompt:
+      type: confirm
+    default: false
+    validators:
+      -
+        name: required
+  -
+    message: "Do you want to enable Clair scan?"
+    name: ClairScanner 
+    prompt:
+      type: confirm
+    disable_questions_on: false
+    default: false
+    validators:
+      -
+        name: required
+  -
+    message: "Please provide the image name to scan"
+    name: ImageToScanUsingClair
+    prompt:
+      type: input
+    parent_name: ClairScanner    
+    validators:
+      -
+        name: required
+
+  -
+    message: "Please provide the image version to scan"
+    name: ImageVersion
+    prompt:
+      type: input
+    parent_name: ClairScanner    
+    validators:
+      -
+        name: required
+  -
+    message: "Do you want to enable Hawkeye scan?"
+    name: HawkeyeScanner 
+    prompt:
+      type: confirm
+    default: false
+    validators:
+      -
+        name: required
+  -
+    message: "Do you want to enable Coverity scan?"
+    name: CoverityScanner
+    prompt:
+      type: confirm
+    default: false
+    validators:
+      -
+        name: required
+  -
+    message: "What is your business unit?"
+    name: BAU
+    help: ""
+    validators:
+        - name: required
+    prompt:
+        type: select
+        options:
+            - "Belong"
+            - "Consumer and Small Business (C&SB)"
+            - "Corporate Affairs"
+            - "Credit Management"
+            - "Chief Risk Office Privacy (CRO)"
+            - "Finance & Strategy (F&S)"
+            - "Global Contact Centres"
+            - "Global Enterprise Services"
+            - "Health"
+            - "Human Resources"
+            - "Media & Marketing"
+            - "Products (includes NBN)"
+            - "Telstra Country Wide (TCW)"
+            - "Telstra Digital"
+            - "Telstra International"
+            - "Telstra Operations"
+            - "Telstra Wholesale"
+            - "Technology Innovation & Strategy (TI&S)"
+
+  -
+    message: "Team lead email"
+    name: TeamLeadEmail
+    help: "Must be an individuals email address and not a distribution list, must end in @team.telstra.com"
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Team group email"
+    name: TeamGroupEmail
+    help: "Must end in @team.telstra.com"
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Does the application stack use Docker images?"
+    name: UsesDockerImages
+    prompt:
+      type: confirm
+    default: true
+    validators:
+      -
+        name: required
+  -
+    message: "Does this application integrate with legacy systems?"
+    name: LegacySystems
+    prompt:
+      type: confirm
+    default: true
+    validators:
+      -
+        name: required
+  -
+    message: "Where is the service exposed to/accessible from?"
+    name: ApplicationAccessibleOverInternet
+    help: "Public/Internet this includes APIs exposed publicly via an API gateway such as OKAPI"
+    prompt:
+      options:
+        - Public/Internet
+        - Private/EDN
+      type: select
+    validators:
+      -
+        name: required
+  -
+    message: "What is the target platform?"
+    name: TargetPlatform
+    prompt:
+      options:
+        - PCF
+        - "AMP Rancher"
+        - "AMP Naked"
+        - Other
+      type: select
+    disable_questions_on: ^(?!Other)
+    validators:
+      -
+        name: required
+  -
+    message: "Specify target platform"
+    name: OtherTargetPlatform
+    parent_name: TargetPlatform
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Information classification"
+    name: InformationClassification
+    help: "https://confluence.tools.telstra.com/display/JETPACK/Links#Links-InformationClassification"
+    prompt:
+      options:
+        - Restricted
+        - Confidential
+        - Internal
+        - Unrestricted
+      type: select
+    metadata:
+      -
+        key: profile
+        value:
+            Restricted: ENHANCED
+            Confidential: STANDARD
+    validators:
+      -
+        name: required
+  -
+    message: "Business critical"
+    help: "https://confluence.tools.telstra.com/display/JETPACK/Links#Links-BusinessCriticality"
+    name: BusinessCritical
+    prompt:
+      type: confirm
+    default: true
+    metadata:
+      -
+        key: profile
+        value:
+            true: ENHANCED
+    validators:
+      -
+        name: required
+  -
+    message: "Business risk consequence"
+    name: BusinessRiskConsequence
+    help: "https://confluence.tools.telstra.com/display/JETPACK/Links#Links-BusinessRiskConsequence"
+    prompt:
+      options:
+        - Extreme
+        - Severe
+        - Major
+        - Moderate
+        - Minor
+      type: select
+    metadata:
+      -
+        key: profile
+        value:
+            Extreme: ENHANCED
+            Severe: ENHANCED
+            Major: STANDARD
+            Moderate: STANDARD
+    validators:
+      -
+        name: required
+  -
+    message: "Is this application used for Telstra Retail or Telstra Wholesale?"
+    name: TelstraRetailOrWholesaleUse
+    prompt:
+      options:
+        - Wholesale
+        - Retail
+        - Both
+      type: select
+    validators:
+      -
+        name: required
+  -
+    message: "Does this application involve or change the way Telstra collects, stores, uses, accesses, transfers or discloses personal information?"
+    name: DoesPIA
+    help: |-
+        Personal information is any information that can be used to identify a particular person.
+        It includes customer data, data relating to our vendors, suppliers, partners, contractors and information about our staff.
+    prompt:
+      type: confirm
+    default: true
+    disable_questions_on: false
+    metadata:
+      -
+        key: profile
+        value:
+            true: ENHANCED
+    validators:
+      -
+        name: required
+  -
+    message: "What type(s) of personal information are you collecting and how will you be collecting it?"
+    name: PIType
+    parent_name: DoesPIA
+    help: |-
+        Personal information should only be collected directly from the individual for a related purpose or function,
+        if personal information will be ontained or purchased from a third party ie marketing or contact lists, then legal approval must be obtained prior to the purchase
+    prompt:
+      type: input
+  -
+    message: "How will your project use any personal information?"
+    name: PIUsage
+    parent_name: DoesPIA
+    help: "Provide a detailed description of how any personal information will be used as a result of this project."
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Is personal information being collected for Telstra by someone else?"
+    name: PIExternal
+    parent_name: DoesPIA
+    help: "e.g. by a research company, agency, Industry, channel partner or vendor"
+    prompt:
+      type: confirm
+    default: true
+    disable_questions_on: false
+  -
+    message: "Who is that third party(s) and which country are they based in?"
+    name: PIExternalDetails
+    parent_name: PIExternal
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+  -
+    message: "Will any personal finanical details, such as credit card numbers or bank account details be collected?"
+    name: PICreditCard
+    parent_name: DoesPIA
+    prompt:
+      type: confirm
+    default: true
+    validators:
+      -
+        name: required
+  -
+    message: "Will any personal information be transferred to, or accessible by external/third parties?"
+    name: PIWillDisclose
+    parent_name: DoesPIA
+    help: "e.g. for development/support purposes, offshore call or data centre functions ect."
+    prompt:
+      type: confirm
+    default: true
+    disable_questions_on: false
+  -
+    message: "Who are they and where are they based?"
+    name: PIWillDiscloseWho
+    parent_name: PIWillDisclose
+    prompt:
+      type: input
+    validators:
+      -
+        name: required
+      -
+        arguments:
+          - 10
+        name: minlength
